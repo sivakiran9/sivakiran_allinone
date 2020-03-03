@@ -1,0 +1,48 @@
+
+installation steps
+------------------
+
+sudo vi /etc/hosts
+
+192.168.122.1 docker-repo
+
+1. docker run -d -p 5000:5000 --restart always --name registry registry----> creating docker container
+2. firewall-cmd --permanent --add-port=80/tcp --->allowing portno 80
+3. firewall-cmd --reload  --->reploading firewall
+4. sudo vi  /etc/docker/daemon.json --->add below containtent
+  { "insecure-registries":["docker-repo:5000"] }
+5. sudo systemctl daemon-reload
+6. sudo systemctl restart docker
+
+$ docker pull ubuntu
+$ docker tag ubuntu docker-repo:5000/ubuntu
+$ docker push docker-repo:5000/ubuntu
+$ docker pull docker-repo:5000/ubuntu
+
+
+
+
+commands to check all docker images and tags
+-------------------------------------------
+curl -X GET http://docker-repo:5000/v2/_catalog
+curl -X GET https://myregistry:5000/v2/ubuntu/tags/list
+docker system df
+docker system df --verbose
+docker ps --size
+
+
+using broswer
+-------------
+http://docker-repo:5000/v2/_catalog
+http://docker-repo:5000/v2/node/tags/list
+
+referance links
+---------------
+
+https://stackoverflow.com/questions/31251356/how-to-get-a-list-of-images-on-docker-registry-v2
+https://hub.docker.com/_/registry
+https://github.com/docker/distribution/issues/1874
+
+
+
+
